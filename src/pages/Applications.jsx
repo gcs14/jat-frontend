@@ -24,8 +24,10 @@ export default function ApplicationsPage() {
         }
 
         const endpoint = role === 'Admin'
-            ? 'http://localhost:5169/api/applications/all'
-            : 'http://localhost:5169/api/applications';
+            // ? 'http://localhost:5169/api/applications/all'
+            // : 'http://localhost:5169/api/applications';
+            ? 'https://jat.azurewebsites.net/api/applications/all'
+            : 'https://jat.azurewebsites.net/api/applications';
 
         if (token) {
             axios.get(endpoint, {
@@ -43,7 +45,7 @@ export default function ApplicationsPage() {
         if (!window.confirm('Are you sure you want to delete ALL applications?')) return;
         try {
             const token = localStorage.getItem('token');
-            await axios.delete('http://localhost:5169/api/applications/all', {
+            await axios.delete('https://jat.azurewebsites.net/api/applications/all', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setApplications([]);
@@ -57,7 +59,7 @@ export default function ApplicationsPage() {
         if (!window.confirm('Are you sure you want to delete this application?')) return;
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5169/api/applications/${id}`, {
+            await axios.delete(`https://jat.azurewebsites.net/api/applications/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setApplications(prev => prev.filter(app => app.applicationId !== id));

@@ -20,7 +20,7 @@ export default function HomePage() {
     const token = localStorage.getItem('token');
     const headers = { Authorization: `Bearer ${token}` };
 
-    axios.get('http://localhost:5169/api/users/profile', { headers })
+    axios.get('https://jat.azurewebsites.net/api/users/profile', { headers })
       .then(res => {
         console.log("USER PROFILE:", res.data);
         setFirstName(res.data.name.split(' ')[0]);
@@ -35,7 +35,7 @@ export default function HomePage() {
 
   const fetchStats = async (headers) => {
     try {
-      const res = await axios.get('http://localhost:5169/api/applications/stats', { headers });
+      const res = await axios.get('https://jat.azurewebsites.net/api/applications/stats', { headers });
       const { totalApplications, interviewsScheduled, byStatus } = res.data;
       const offered = byStatus['Offer Received'] || 0;
       const rejected = byStatus['Rejected'] || 0;
@@ -49,7 +49,7 @@ export default function HomePage() {
 
   const fetchRecentApps = async (headers) => {
     try {
-      const res = await axios.get('http://localhost:5169/api/applications/recent', { headers });
+      const res = await axios.get('https://jat.azurewebsites.net/api/applications/recent', { headers });
       setRecentApps(res.data);
     } catch (err) {
       console.error('Failed to fetch recent applications:', err);

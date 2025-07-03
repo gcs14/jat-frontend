@@ -12,7 +12,7 @@ export default function ProfilePage() {
         const token = localStorage.getItem('token');
         const headers = { Authorization: `Bearer ${token}` };
 
-        axios.get('http://localhost:5169/api/users/profile', { headers })
+        axios.get('https://jat.azurewebsites.net/api/users/profile', { headers })
             .then(res => {
                 setUser(res.data);
                 setIsAdmin(res.data.role === 'Admin');
@@ -29,7 +29,7 @@ export default function ProfilePage() {
             const token = localStorage.getItem('token');
             const headers = { Authorization: `Bearer ${token}` };
 
-            await axios.put('http://localhost:5169/api/users/profile', {
+            await axios.put('https://jat.azurewebsites.net/api/users/profile', {
                 name: user.name,
                 email: user.email,
                 phoneNumber: user.phoneNumber
@@ -47,7 +47,7 @@ export default function ProfilePage() {
             const token = localStorage.getItem('token');
             const headers = { Authorization: `Bearer ${token}` };
 
-            await axios.post('http://localhost:5169/api/users/change-password', passwords, { headers });
+            await axios.post('https://jat.azurewebsites.net/api/users/change-password', passwords, { headers });
             alert('Password updated!');
             setPasswords({ currentPassword: '', newPassword: '' });
             navigate('/');
@@ -63,7 +63,7 @@ export default function ProfilePage() {
             const token = localStorage.getItem('token');
             const headers = { Authorization: `Bearer ${token}` };
 
-            await axios.delete('http://localhost:5169/api/users/profile', { headers });
+            await axios.delete('https://jat.azurewebsites.net/api/users/profile', { headers });
             alert('Account deleted.');
             localStorage.removeItem('token');
             navigate('/login');
@@ -76,7 +76,7 @@ export default function ProfilePage() {
         if (!window.confirm("This will erase all data and restart the demo. Continue?")) return;
 
         try {
-            await axios.post("http://localhost:5169/api/demo/restart");
+            await axios.post("https://jat.azurewebsites.net/api/demo/restart");
             alert("Database restarted. Reloading...");
             // window.location.reload();
             navigate('/login');

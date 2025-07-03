@@ -30,7 +30,8 @@ function EditApplication() {
     useEffect(() => {
         const fetchApplication = async () => {
             try {
-                const response = await axios.get(`http://localhost:5169/api/applications/${id}`, {
+                // const response = await axios.get(`http://localhost:5169/api/applications/${id}`, {
+                const response = await axios.get(`https://jat.azurewebsites.net/api/applications/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 const data = response.data;
@@ -95,7 +96,7 @@ function EditApplication() {
         };
 
         try {
-            await axios.patch(`http://localhost:5169/api/applications/${id}`, payload, {
+            await axios.patch(`https://jat.azurewebsites.net/api/applications/${id}`, payload, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json"
@@ -266,7 +267,7 @@ function EditApplication() {
                         <div className="col-span-2">
                             <label className="block font-medium">Resume</label>
                             <a
-                                href={`http://localhost:5169/api/resumes/${resumeFileName}`}
+                                href={`https://jat.azurewebsites.net/api/resumes/${resumeFileName}`}
                                 className="text-blue-600 underline"
                                 target="_blank"
                                 rel="noopener noreferrer"

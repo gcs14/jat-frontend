@@ -26,7 +26,7 @@ export default function NewApplication() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     axios
-      .get('http://localhost:5169/api/resumes', { headers: { Authorization: `Bearer ${token}` } })
+      .get('https://jat.azurewebsites.net/api/resumes', { headers: { Authorization: `Bearer ${token}` } })
       .then(res => setResumes(res.data))
       .catch(err => console.error('Failed to load resumes', err));
   }, []);
@@ -80,7 +80,7 @@ export default function NewApplication() {
         return;
       }
 
-      await axios.post('http://localhost:5169/api/applications', payload, {
+      await axios.post('https://jat.azurewebsites.net/api/applications', payload, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'

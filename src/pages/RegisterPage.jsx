@@ -53,7 +53,7 @@ function RegisterPage() {
     if (!validate()) return;
 
     try {
-      const response = await fetch('http://localhost:5169/api/auth/register', {
+      const response = await fetch('https://jat.azurewebsites.net/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, phoneNumber, password }),

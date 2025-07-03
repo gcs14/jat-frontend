@@ -24,7 +24,7 @@ export default function ResumesPage() {
         }
 
         if (token) {
-            axios.get('http://localhost:5169/api/resumes', {
+            axios.get('https://jat.azurewebsites.net/api/resumes', {
                 headers: { Authorization: `Bearer ${token}` }
             })
                 .then(res => setResumes(res.data))
@@ -36,7 +36,7 @@ export default function ResumesPage() {
         if (!window.confirm('Delete this resume?')) return;
         const token = localStorage.getItem('token');
         try {
-            await axios.delete(`http://localhost:5169/api/resumes/${id}`, {
+            await axios.delete(`https://jat.azurewebsites.net/api/resumes/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setResumes(prev => prev.filter(r => r.resumeId !== id));
@@ -50,7 +50,7 @@ export default function ResumesPage() {
 
         const token = localStorage.getItem('token');
         try {
-            await axios.delete("http://localhost:5169/api/resumes/admin/delete-all", {
+            await axios.delete("https://jat.azurewebsites.net/api/resumes/admin/delete-all", {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setResumes([]);
@@ -73,7 +73,7 @@ export default function ResumesPage() {
 
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.get(`http://localhost:5169/api/resumes/${id}/download`, {
+            const response = await axios.get(`https://jat.azurewebsites.net/api/resumes/${id}/download`, {
                 responseType: 'blob',
                 headers: { Authorization: `Bearer ${token}` }
             });

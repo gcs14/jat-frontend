@@ -10,7 +10,7 @@ function FollowUps() {
         const token = localStorage.getItem("token");
 
         axios
-            .get("http://localhost:5169/api/applications/followups", {
+            .get("https://jat.azurewebsites.net/api/applications/followups", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

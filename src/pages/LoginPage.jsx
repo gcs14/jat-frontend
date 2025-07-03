@@ -13,7 +13,7 @@ function LoginPage() {
     setErrorMessage('');
 
     try {
-      const response = await fetch('http://localhost:5169/api/auth/login', {
+      const response = await fetch('https://jat.azurewebsites.net/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -43,7 +43,7 @@ function LoginPage() {
     if (!window.confirm("This will erase all data and restart the demo. Continue?")) return;
 
     try {
-      await axios.post("http://localhost:5169/api/demo/restart");
+      await axios.post("https://jat.azurewebsites.net/api/demo/restart");
       alert("Database restarted. Reloading...");
       window.location.reload();
     } catch (err) {

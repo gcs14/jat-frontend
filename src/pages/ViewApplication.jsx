@@ -15,7 +15,7 @@ function ViewApplication() {
             const headers = { Authorization: `Bearer ${token}` };
 
             try {
-                const response = await axios.get(`http://localhost:5169/api/applications/${id}`, { headers });
+                const response = await axios.get(`https://jat.azurewebsites.net/api/applications/${id}`, { headers });
                 setApplication(response.data);
             } catch (error) {
                 console.error('Error fetching application:', error);
