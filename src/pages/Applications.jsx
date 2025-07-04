@@ -73,10 +73,10 @@ export default function ApplicationsPage() {
         let filtered = applications.filter(app => {
             const term = searchTerm.toLowerCase();
             return (
-                app.userFullName.toLowerCase().includes(term) ||
-                app.companyName.toLowerCase().includes(term) ||
-                app.jobTitle.toLowerCase().includes(term) ||
-                app.status.toLowerCase().includes(term)
+                (app.userFullName?.toLowerCase() || '').includes(term) ||
+                (app.companyName?.toLowerCase() || '').includes(term) ||
+                (app.jobTitle?.toLowerCase() || '').includes(term) ||
+                (app.status?.toLowerCase() || '').includes(term)
             );
         });
         const { key, direction } = sortConfig;
