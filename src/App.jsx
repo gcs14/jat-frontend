@@ -9,7 +9,7 @@ import EditApplication from './pages/EditApplication.jsx'
 import FollowUps from './pages/Followups.jsx';
 import Resumes from './pages/Resumes.jsx';
 import Profile from './pages/Profile.jsx';
-import ProtectedRoute from './pages/ProtectedRoute';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 function App() {
   return (
