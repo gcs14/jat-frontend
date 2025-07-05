@@ -49,11 +49,12 @@ export default function ProfilePage() {
 
             await axios.post('https://jat.azurewebsites.net/api/users/change-password', passwords, { headers });
             alert('Password updated!');
-            setPasswords({ currentPassword: '', newPassword: '' });
+            setPasswords({ currentPassword: '', newPassword: '', confirmNewPassword: '' });
             navigate('/');
         } catch (err) {
             console.error('Error changing password:', err);
-            alert('Password change failed.');
+            const errorMessage = err?.response?.data || 'Password change failed.';
+            alert(errorMessage);
         }
     };
 
@@ -165,6 +166,15 @@ export default function ProfilePage() {
                             type="password"
                             value={passwords.newPassword}
                             onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
+                            className="w-full mt-1 p-2 border rounded"
+                        />
+                    </div>
+                    <div>
+                        <label className="block font-medium">Confirm New Password</label>
+                        <input
+                            type="password"
+                            value={passwords.confirmNewPassword || ''}
+                            onChange={(e) => setPasswords({ ...passwords, confirmNewPassword: e.target.value })}
                             className="w-full mt-1 p-2 border rounded"
                         />
                     </div>
