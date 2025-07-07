@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Papa from 'papaparse';
 import { saveAs } from 'file-saver';
@@ -10,6 +10,7 @@ export default function ApplicationsPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'companyName', direction: 'ascending' });
     const [isAdmin, setIsAdmin] = useState(false);
+    const navigate = useNavigate();
     // const [userName, setUserName] = useState('user');
 
     useEffect(() => {
