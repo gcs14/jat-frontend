@@ -71,18 +71,56 @@ export default function ApplicationsPage() {
         }
     };
 
-    const handleDownloadCSV = () => {
-        const token = localStorage.getItem('token');
-        let userName = app.userFullName;
+    // const handleDownloadCSV = () => {
+    //     const token = localStorage.getItem('token');
+    //     let userName = userName;
 
-        if (token) {
-            try {
-                const payload = JSON.parse(window.atob(token.split('.')[1]));
-                userName = (payload.name || payload.unique_name || 'user').replace(/\s+/g, '_');
-            } catch {
-                console.warn("Failed to decode token for username");
-            }
-        }
+    //     if (token) {
+    //         try {
+    //             const payload = JSON.parse(window.atob(token.split('.')[1]));
+    //             userName = (payload.name || payload.unique_name || 'user').replace(/\s+/g, '_');
+    //         } catch {
+    //             console.warn("Failed to decode token for username");
+    //         }
+    //     }
+
+    //     const csvData = sortedAndFiltered.map(app => ({
+    //         Name: isAdmin ? app.userFullName : undefined,
+    //         Company: app.companyName,
+    //         JobTitle: app.jobTitle,
+    //         Status: app.status,
+    //         DateApplied: new Date(app.dateApplied).toLocaleDateString()
+    //     }));
+
+    //     const cleanedData = csvData.map(row => {
+    //         const result = {};
+    //         Object.entries(row).forEach(([key, value]) => {
+    //             if (value !== undefined) result[key] = value;
+    //         });
+    //         return result;
+    //     });
+
+    //     const csv = Papa.unparse(cleanedData);
+    //     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+
+    //     const dateOnly = new Date().toISOString().split('T')[0];
+    //     const keywordPart = searchTerm ? `_${searchTerm.replace(/\s+/g, '_')}` : '';
+    //     const fileName = `${userName}_applications${keywordPart}_${dateOnly}.csv`;
+
+    //     saveAs(blob, fileName);
+    // };
+
+    const handleDownloadCSV = () => {
+        // Use the first application to grab the user name (assuming it's the same across the list)
+        const firstApp = sortedAndFiltered[0];
+        let userName = firstApp?.userFullName || 'user';
+
+        // Clean username and search term for file name
+        userName = userName.replace(/\s+/g, '_');
+        const keywordPart = searchTerm ? `_${searchTerm.replace(/\s+/g, '_')}` : '';
+        const dateOnly = new Date().toISOString().split('T')[0];
+
+        const fileName = `${userName}_applications${keywordPart}_${dateOnly}.csv`;
 
         const csvData = sortedAndFiltered.map(app => ({
             Name: isAdmin ? app.userFullName : undefined,
@@ -102,13 +140,9 @@ export default function ApplicationsPage() {
 
         const csv = Papa.unparse(cleanedData);
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-
-        const dateOnly = new Date().toISOString().split('T')[0];
-        const keywordPart = searchTerm ? `_${searchTerm.replace(/\s+/g, '_')}` : '';
-        const fileName = `${userName}_applications${keywordPart}_${dateOnly}.csv`;
-
         saveAs(blob, fileName);
     };
+
 
     const sortedAndFiltered = useMemo(() => {
         let filtered = applications.filter(app => {
