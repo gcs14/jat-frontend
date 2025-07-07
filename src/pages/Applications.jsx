@@ -72,6 +72,18 @@ export default function ApplicationsPage() {
     };
 
     const handleDownloadCSV = () => {
+        const token = localStorage.getItem('token');
+        let userName = 'user';
+
+        if (token) {
+            try {
+                const payload = JSON.parse(window.atob(token.split('.')[1]));
+                userName = (payload.name || payload.unique_name || 'user').replace(/\s+/g, '_');
+            } catch {
+                console.warn("Failed to decode token for username");
+            }
+        }
+
         const csvData = sortedAndFiltered.map(app => ({
             Name: isAdmin ? app.userFullName : undefined,
             Company: app.companyName,
@@ -90,8 +102,14 @@ export default function ApplicationsPage() {
 
         const csv = Papa.unparse(cleanedData);
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        saveAs(blob, 'applications.csv');
+
+        const timestamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+        const keywordPart = searchTerm ? `_${searchTerm.replace(/\s+/g, '_')}` : '';
+        const fileName = `${userName}_applications${keywordPart}_${timestamp}.csv`;
+
+        saveAs(blob, fileName);
     };
+
 
     const sortedAndFiltered = useMemo(() => {
         let filtered = applications.filter(app => {
@@ -171,14 +189,13 @@ export default function ApplicationsPage() {
                         onChange={e => setSearchTerm(e.target.value)}
                         className="border rounded p-2 w-80"
                     />
+                    <button
+                        onClick={handleDownloadCSV}
+                        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 ml-2"
+                    >
+                        Download CSV
+                    </button>
                 </div>
-                <button
-                    onClick={handleDownloadCSV}
-                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 ml-2"
-                >
-                    Download CSV
-                </button>
-
             </div>
             {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
 
