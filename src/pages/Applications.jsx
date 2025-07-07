@@ -74,7 +74,7 @@ export default function ApplicationsPage() {
 
     const handleDownloadCSV = () => {
         const token = localStorage.getItem('token');
-        let userName = 'user';
+        let userName = userFullName;
 
         if (token) {
             try {
