@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Papa from 'papaparse';
+import { saveAs } from 'file-saver';
 
 export default function ApplicationsPage() {
     const [applications, setApplications] = useState([]);
@@ -67,6 +69,28 @@ export default function ApplicationsPage() {
             console.error('Delete failed', err);
             setError('Failed to delete application');
         }
+    };
+
+    const handleDownloadCSV = () => {
+        const csvData = sortedAndFiltered.map(app => ({
+            Name: isAdmin ? app.userFullName : undefined,
+            Company: app.companyName,
+            JobTitle: app.jobTitle,
+            Status: app.status,
+            DateApplied: new Date(app.dateApplied).toLocaleDateString()
+        }));
+
+        const cleanedData = csvData.map(row => {
+            const result = {};
+            Object.entries(row).forEach(([key, value]) => {
+                if (value !== undefined) result[key] = value;
+            });
+            return result;
+        });
+
+        const csv = Papa.unparse(cleanedData);
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        saveAs(blob, 'applications.csv');
     };
 
     const sortedAndFiltered = useMemo(() => {
@@ -148,6 +172,13 @@ export default function ApplicationsPage() {
                         className="border rounded p-2 w-80"
                     />
                 </div>
+                <button
+                    onClick={handleDownloadCSV}
+                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 ml-2"
+                >
+                    Download CSV
+                </button>
+
             </div>
             {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
 
