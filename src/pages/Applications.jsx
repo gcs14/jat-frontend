@@ -10,6 +10,7 @@ export default function ApplicationsPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'companyName', direction: 'ascending' });
     const [isAdmin, setIsAdmin] = useState(false);
+    const [userName, setUserName] = useState('user');
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -103,12 +104,13 @@ export default function ApplicationsPage() {
         const csv = Papa.unparse(cleanedData);
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
 
-        const timestamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+        const dateOnly = new Date().toISOString().split('T')[0];
         const keywordPart = searchTerm ? `_${searchTerm.replace(/\s+/g, '_')}` : '';
-        const fileName = `${userName}_applications${keywordPart}_${timestamp}.csv`;
+        const fileName = `${userName}_applications${keywordPart}_${dateOnly}.csv`;
 
         saveAs(blob, fileName);
     };
+
 
 
     const sortedAndFiltered = useMemo(() => {
