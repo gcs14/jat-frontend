@@ -10,19 +10,7 @@ export default function ApplicationsPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'companyName', direction: 'ascending' });
     const [isAdmin, setIsAdmin] = useState(false);
-
-    const [userName, setUserName] = useState(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                const payload = JSON.parse(window.atob(token.split('.')[1]));
-                return (payload.name || payload.unique_name || 'user').replace(/\s+/g, '_');
-            } catch {
-                return 'user';
-            }
-        }
-        return 'user';
-    });
+    // const [userName, setUserName] = useState('user');
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -84,6 +72,16 @@ export default function ApplicationsPage() {
 
     const handleDownloadCSV = () => {
         const token = localStorage.getItem('token');
+        let userName = app.userFullName;
+
+        if (token) {
+            try {
+                const payload = JSON.parse(window.atob(token.split('.')[1]));
+                userName = (payload.name || payload.unique_name || 'user').replace(/\s+/g, '_');
+            } catch {
+                console.warn("Failed to decode token for username");
+            }
+        }
 
         const csvData = sortedAndFiltered.map(app => ({
             Name: isAdmin ? app.userFullName : undefined,
@@ -110,8 +108,6 @@ export default function ApplicationsPage() {
 
         saveAs(blob, fileName);
     };
-
-
 
     const sortedAndFiltered = useMemo(() => {
         let filtered = applications.filter(app => {
