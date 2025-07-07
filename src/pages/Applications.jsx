@@ -10,7 +10,19 @@ export default function ApplicationsPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'companyName', direction: 'ascending' });
     const [isAdmin, setIsAdmin] = useState(false);
-    const [userName, setUserName] = useState('user');
+
+    const [userName, setUserName] = useState(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const payload = JSON.parse(window.atob(token.split('.')[1]));
+                return (payload.name || payload.unique_name || 'user').replace(/\s+/g, '_');
+            } catch {
+                return 'user';
+            }
+        }
+        return 'user';
+    });
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -27,8 +39,6 @@ export default function ApplicationsPage() {
         }
 
         const endpoint = role === 'Admin'
-            // ? 'http://localhost:5169/api/applications/all'
-            // : 'http://localhost:5169/api/applications';
             ? 'https://jat.azurewebsites.net/api/applications/all'
             : 'https://jat.azurewebsites.net/api/applications';
 
@@ -74,16 +84,6 @@ export default function ApplicationsPage() {
 
     const handleDownloadCSV = () => {
         const token = localStorage.getItem('token');
-        let userName = userFullName;
-
-        if (token) {
-            try {
-                const payload = JSON.parse(window.atob(token.split('.')[1]));
-                userName = (payload.name || payload.unique_name || 'user').replace(/\s+/g, '_');
-            } catch {
-                console.warn("Failed to decode token for username");
-            }
-        }
 
         const csvData = sortedAndFiltered.map(app => ({
             Name: isAdmin ? app.userFullName : undefined,
