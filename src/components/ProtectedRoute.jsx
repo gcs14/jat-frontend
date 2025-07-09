@@ -1,8 +1,9 @@
 import { Navigate } from "react-router-dom";
-import jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
+  const decoded = jwtDecode(token);
 
   if (!token) {
     window.location.href = "https://purple-field-0594e540f.2.azurestaticapps.net/login";
