@@ -3,26 +3,22 @@ import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
-  const decoded = jwtDecode(token);
 
   if (!token) {
-    window.location.href = "https://purple-field-0594e540f.2.azurestaticapps.net/login";
-    return null;
+    return <Navigate to="/login" />;
   }
 
   try {
-    const decoded = jwt_decode(token);
-    const currentTime = Date.now() / 1000;
-
-    if (decoded.exp < currentTime) {
+    const decoded = jwtDecode(token);
+    const exp = decoded.exp;
+    if (exp && Date.now() >= exp * 1000) {
       localStorage.removeItem("token");
-      window.location.href = "https://purple-field-0594e540f.2.azurestaticapps.net/login";
-      return null;
+      return <Navigate to="/login" />;
     }
   } catch (error) {
+    console.error("Token decode failed:", error.message);
     localStorage.removeItem("token");
-    window.location.href = "https://purple-field-0594e540f.2.azurestaticapps.net/login";
-    return null;
+    return <Navigate to="/login" />;
   }
 
   return children;
