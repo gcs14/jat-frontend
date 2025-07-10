@@ -60,10 +60,15 @@ function RegisterPage() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        console.log('Registration successful', data);
+        if (response.status !== 204) {
+          const data = await response.json();
+          console.log('Registration successful', data);
+        } else {
+          console.log('Registration successful (204 No Content)');
+        }
       } else {
-        console.error('Registration failed');
+        const errorText = await response.text();
+        console.error('Registration failed:', errorText);
       }
     } catch (error) {
       console.error('Error during registration', error);
