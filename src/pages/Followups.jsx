@@ -9,7 +9,7 @@ const getStatusColor = (status) => {
         'Interview': 'bg-purple-100 text-purple-700 border-purple-200',
         'Interviewing': 'bg-purple-100 text-purple-700 border-purple-200',
         'Offer': 'bg-green-100 text-green-700 border-green-200',
-        'Offered': 'bg-green-100 text-green-700 border-green-200',
+        'Offer Received': 'bg-green-100 text-green-700 border-green-200',
         'Rejected': 'bg-red-100 text-red-700 border-red-200',
         'Withdrawn': 'bg-gray-100 text-gray-700 border-gray-200'
     };
