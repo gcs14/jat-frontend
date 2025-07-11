@@ -50,40 +50,83 @@ export default function NewApplication() {
     }
   };
 
+  // const onSubmit = async e => {
+  //   e.preventDefault();
+  //   setError('');
+
+  //   try {
+  //     const token = localStorage.getItem('token');
+
+  //     const payload = {
+  //       companyName: form.companyName,
+  //       jobTitle: form.jobTitle,
+  //       dateApplied: form.dateApplied,
+  //       postingDate: form.postingDate || null,
+  //       closingDate: form.closingDate || null,
+  //       jobLocation: form.jobLocation,
+  //       employmentType: form.employmentType,
+  //       workModel: form.workModel,
+  //       resumeFileName: form.resumeFileName || null,
+  //       salaryRange: form.salaryRange || null,
+  //       description: form.description || null,
+  //     };
+
+  //     if (form.useExisting === 'upload' && form.resumeFile) {
+  //       payload.resumeFileName = form.resumeFile.name; // only filename
+  //     } else if (form.useExisting === 'existing' && form.resumeId) {
+  //       payload.resumeId = form.resumeId;
+  //     } else {
+  //       setError('Please select or upload a resume.');
+  //       return;
+  //     }
+
+  //     await axios.post('https://jat.azurewebsites.net/api/applications', payload, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         'Content-Type': 'application/json'
+  //       }
+  //     });
+
+  //     navigate('/');
+  //   } catch (err) {
+  //     console.error(err);
+  //     setError(err.response?.data?.message || 'Submission failed');
+  //   }
+  // };
+
   const onSubmit = async e => {
     e.preventDefault();
     setError('');
 
     try {
       const token = localStorage.getItem('token');
+      const formData = new FormData();
 
-      const payload = {
-        companyName: form.companyName,
-        jobTitle: form.jobTitle,
-        dateApplied: form.dateApplied,
-        postingDate: form.postingDate || null,
-        closingDate: form.closingDate || null,
-        jobLocation: form.jobLocation,
-        employmentType: form.employmentType,
-        workModel: form.workModel,
-        resumeFileName: form.resumeFileName || null,
-        salaryRange: form.salaryRange || null,
-        description: form.description || null,
-      };
+      formData.append('companyName', form.companyName);
+      formData.append('jobTitle', form.jobTitle);
+      formData.append('dateApplied', form.dateApplied);
+      formData.append('postingDate', form.postingDate || '');
+      formData.append('closingDate', form.closingDate || '');
+      formData.append('jobLocation', form.jobLocation);
+      formData.append('employmentType', form.employmentType);
+      formData.append('workModel', form.workModel);
+      formData.append('salaryRange', form.salaryRange || '');
+      formData.append('description', form.description || '');
 
       if (form.useExisting === 'upload' && form.resumeFile) {
-        payload.resumeFileName = form.resumeFile.name; // only filename
+        formData.append('resumeFile', form.resumeFile); // send the actual file
+        formData.append('resumeFileName', form.resumeFile.name);
       } else if (form.useExisting === 'existing' && form.resumeId) {
-        payload.resumeId = form.resumeId;
+        formData.append('resumeId', form.resumeId);
       } else {
         setError('Please select or upload a resume.');
         return;
       }
 
-      await axios.post('https://jat.azurewebsites.net/api/applications', payload, {
+      await axios.post('https://jat.azurewebsites.net/api/applications', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'multipart/form-data'
         }
       });
 
