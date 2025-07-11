@@ -857,6 +857,17 @@ export default function NewApplication() {
                 <option value="Hybrid">Hybrid</option>
               </select>
             </div>
+            <div>
+              <label className="block text-sm font-medium">Salary Range</label>
+              <input
+                type="text"
+                name="salaryRange"
+                value={form.salaryRange}
+                onChange={onChange}
+                placeholder="e.g., $80,000 - $100,000"
+                className="mt-1 block w-full border rounded p-2"
+              />
+            </div>
             {/* <div>
               <label className="block text-sm font-medium">Status</label>
               <select
@@ -875,7 +886,7 @@ export default function NewApplication() {
             </div> */}
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium">Salary Range</label>
               <input
@@ -887,7 +898,7 @@ export default function NewApplication() {
                 className="mt-1 block w-full border rounded p-2"
               />
             </div>
-            {/* <div>
+            <div>
               <label className="block text-sm font-medium">Follow Up Date</label>
               <input
                 type="date"
@@ -896,8 +907,8 @@ export default function NewApplication() {
                 onChange={onChange}
                 className="mt-1 block w-full border rounded p-2"
               />
-            </div> */}
-          </div>
+            </div>
+          </div> */}
 
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center">
