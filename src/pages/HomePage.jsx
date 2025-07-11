@@ -215,7 +215,9 @@ export default function HomePage() {
       fetchRecentApps(headers)
     ])
       .then(([profileRes]) => {
-        setFirstName(profileRes.data.name.split(' ')[0]);
+        const firstName = profileRes.data.name.split(' ')[0];
+        // Ensure first letter is capitalized
+        setFirstName(firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase());
         setRole(profileRes.data.role);
         setIsLoading(false);
       })
