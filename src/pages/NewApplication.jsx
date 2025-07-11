@@ -115,6 +115,12 @@ export default function NewApplication() {
     try {
       const token = localStorage.getItem('token');
 
+      // Extract resume file name if a file is selected and filename hasn't been captured yet
+      let resumeFileName = form.resumeFileName;
+      if (!resumeFileName && form.resumeFile instanceof File) {
+        resumeFileName = form.resumeFile.name;
+      }
+
       const payload = {
         companyName: form.companyName,
         jobTitle: form.jobTitle,
@@ -130,7 +136,7 @@ export default function NewApplication() {
         followUpDate: form.followUpDate || null,
         interviewScheduled: form.interviewScheduled || false,
         interviewDate: form.interviewDate || null,
-        resumeFileName: form.resumeFile ? form.resumeFile.name : null
+        resumeFileName: resumeFileName || null
       };
 
       if (!payload.companyName || !payload.jobTitle || !payload.dateApplied || !payload.jobLocation || !payload.employmentType || !payload.workModel) {
