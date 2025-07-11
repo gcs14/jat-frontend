@@ -119,60 +119,62 @@ export default function NewApplication() {
   //   }
   // };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
+  // const onSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setError('');
 
-    try {
-      const token = localStorage.getItem('token');
+  //   try {
+  //     const token = localStorage.getItem('token');
 
-      // Extract resume file name if a file is selected and filename hasn't been captured yet
-      let resumeFileName = form.resumeFileName;
-      if (!resumeFileName && form.resumeFile instanceof File) {
-        resumeFileName = form.resumeFile.name;
-      }
+  //     // Extract resume file name if a file is selected and filename hasn't been captured yet
+  //     let resumeFileName = form.resumeFileName;
+  //     if (!resumeFileName && form.resumeFile instanceof File) {
+  //       resumeFileName = form.resumeFile.name;
+  //     }
 
-      const payload = {
-        companyName: form.companyName,
-        jobTitle: form.jobTitle,
-        dateApplied: form.dateApplied,
-        postingDate: form.postingDate || null,
-        closingDate: form.closingDate || null,
-        jobLocation: form.jobLocation,
-        employmentType: form.employmentType,
-        workModel: form.workModel,
-        status: form.status || 'Pending',
-        salaryRange: form.salaryRange || null,
-        description: form.description || null,
-        followUpDate: form.followUpDate || null,
-        interviewScheduled: form.interviewScheduled || false,
-        interviewDate: form.interviewDate || null,
-        resumeFileName: resumeFileName || null
-      };
+  //     const payload = new FormData();
+  //     payload.append('CompanyName', formData.companyName);
+  //     payload.append('JobTitle', formData.jobTitle);
+  //     payload.append('DateApplied', formData.dateApplied || '');
+  //     payload.append('PostingDate', formData.postingDate || '');
+  //     payload.append('ClosingDate', formData.closingDate || '');
+  //     payload.append('JobLocation', formData.jobLocation);
+  //     payload.append('EmploymentType', formData.employmentType);
+  //     payload.append('WorkModel', formData.workModel);
+  //     payload.append('Status', formData.status);
+  //     payload.append('SalaryRange', formData.salaryRange || '');
+  //     payload.append('Description', formData.description || '');
+  //     payload.append('FollowUpDate', formData.followUpDate || '');
+  //     payload.append('InterviewScheduled', formData.interviewScheduled);
+  //     payload.append('InterviewDate', formData.interviewDate || '');
 
-      if (!payload.companyName || !payload.jobTitle || !payload.dateApplied || !payload.jobLocation || !payload.employmentType || !payload.workModel) {
-        setError('Please fill out all required fields.');
-        return;
-      }
+  //     if (formData.resumeFile) {
+  //       payload.append('resumeFile', formData.resumeFile);
+  //     }
 
-      if (!payload.resumeFileName) {
-        setError('Please select a resume file.');
-        return;
-      }
+  //     if (!payload.companyName || !payload.jobTitle || !payload.dateApplied || !payload.jobLocation || !payload.employmentType || !payload.workModel) {
+  //       setError('Please fill out all required fields.');
+  //       return;
+  //     }
 
-      await axios.post('https://jat.azurewebsites.net/api/applications', payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+  //     if (!payload.resumeFileName) {
+  //       setError('Please select a resume file.');
+  //       return;
+  //     }
 
-      navigate('/');
-    } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.message || 'Submission failed.');
-    }
-  };
+  //     await axios.post('https://jat.azurewebsites.net/api/applications', payload, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         'Content-Type': 'application/json'
+  //       }
+  //     });
+
+  //     navigate('/');
+  //   } catch (err) {
+  //     console.error(err);
+  //     setError(err.response?.data?.message || 'Submission failed.');
+  //   }
+  // };
 
 
   // const onSubmit = async e => {
@@ -217,6 +219,75 @@ export default function NewApplication() {
   //     setError(err.response?.data?.message || 'Submission failed');
   //   }
   // };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    try {
+      const token = localStorage.getItem('token');
+
+      if (
+        !form.companyName ||
+        !form.jobTitle ||
+        !form.dateApplied ||
+        !form.jobLocation ||
+        !form.employmentType ||
+        !form.workModel
+      ) {
+        setError('Please fill out all required fields.');
+        return;
+      }
+
+      if (form.useExisting === 'upload' && !form.resumeFile) {
+        setError('Please select a resume file to upload.');
+        return;
+      }
+
+      if (form.useExisting === 'existing' && !form.resumeId) {
+        setError('Please select an existing resume.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('CompanyName', form.companyName);
+      formData.append('JobTitle', form.jobTitle);
+      formData.append('DateApplied', form.dateApplied);
+      formData.append('PostingDate', form.postingDate || '');
+      formData.append('ClosingDate', form.closingDate || '');
+      formData.append('JobLocation', form.jobLocation);
+      formData.append('EmploymentType', form.employmentType);
+      formData.append('WorkModel', form.workModel);
+      formData.append('Status', form.status || '');
+      formData.append('SalaryRange', form.salaryRange || '');
+      formData.append('Description', form.description || '');
+      formData.append('FollowUpDate', form.followUpDate || '');
+      formData.append('InterviewScheduled', form.interviewScheduled);
+      formData.append('InterviewDate', form.interviewDate || '');
+
+      if (form.useExisting === 'upload') {
+        formData.append('resumeFile', form.resumeFile);
+      } else {
+        formData.append('ResumeId', form.resumeId); // backend expects ResumeId
+      }
+
+      await axios.post('https://jat.azurewebsites.net/api/applications', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // DO NOT manually set Content-Type for FormData
+        }
+      });
+
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      const message = err.response?.data?.message ||
+        err.response?.data?.errors?.[Object.keys(err.response?.data?.errors || {})[0]]?.[0] ||
+        'Submission failed.';
+      setError(message);
+    }
+  };
+
 
   const handleLogout = () => {
     const confirmed = window.confirm("Are you sure you want to logout?");
