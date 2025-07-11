@@ -89,7 +89,6 @@ export default function NewApplication() {
     try {
       const token = localStorage.getItem('token');
 
-      // Validation
       if (
         !form.companyName.trim() ||
         !form.jobTitle.trim() ||
@@ -115,7 +114,6 @@ export default function NewApplication() {
         return;
       }
 
-      // Create FormData
       const formData = new FormData();
       formData.append('CompanyName', form.companyName.trim());
       formData.append('JobTitle', form.jobTitle.trim());
@@ -125,7 +123,6 @@ export default function NewApplication() {
       formData.append('WorkModel', form.workModel);
       formData.append('Status', form.status || 'Pending');
 
-      // Optional fields
       if (form.postingDate) {
         formData.append('PostingDate', form.postingDate);
       }
@@ -148,7 +145,6 @@ export default function NewApplication() {
         formData.append('InterviewDate', form.interviewDate);
       }
 
-      // Handle resume
       if (form.useExisting === 'upload' && form.resumeFile) {
         formData.append('ResumeFile', form.resumeFile);
       } else if (form.useExisting === 'existing' && form.resumeId) {
@@ -277,7 +273,6 @@ export default function NewApplication() {
           )}
 
           <form onSubmit={onSubmit} className="space-y-6">
-            {/* Basic Information */}
             <div className="border-b border-gray-200 pb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -312,7 +307,6 @@ export default function NewApplication() {
               </div>
             </div>
 
-            {/* Dates */}
             <div className="border-b border-gray-200 pb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Important Dates</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -356,7 +350,6 @@ export default function NewApplication() {
               </div>
             </div>
 
-            {/* Resume Section */}
             <div className="border-b border-gray-200 pb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Resume *</h3>
               <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
@@ -423,7 +416,6 @@ export default function NewApplication() {
               </div>
             </div>
 
-            {/* Job Details */}
             <div className="border-b border-gray-200 pb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Job Details</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -490,12 +482,10 @@ export default function NewApplication() {
               </div>
             </div>
 
-            {/* Additional Information */}
             <div className="border-b border-gray-200 pb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Information</h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                {/* Interview Section */}
                 <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
                   <div className="flex items-center mb-3">
                     <input
@@ -523,7 +513,6 @@ export default function NewApplication() {
                   )}
                 </div>
 
-                {/* Follow Up */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Follow Up Date
@@ -539,7 +528,6 @@ export default function NewApplication() {
               </div>
             </div>
 
-            {/* Description */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Job Description & Notes
@@ -554,7 +542,6 @@ export default function NewApplication() {
               />
             </div>
 
-            {/* Form Actions */}
             <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
               <button
                 type="button"
