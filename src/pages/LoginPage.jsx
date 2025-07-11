@@ -45,7 +45,8 @@ function LoginPage() {
     try {
       await axios.post("https://jat.azurewebsites.net/api/demo/restart");
       alert("Database restarted. Reloading...");
-      window.location.reload();
+      // window.location.reload();
+      navigate('/login')
     } catch (err) {
       console.error("Restart failed", err);
       alert("Something went wrong.");
