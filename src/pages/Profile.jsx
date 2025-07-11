@@ -348,7 +348,28 @@ export default function ProfilePage() {
             </header>
 
             <main className="p-6 max-w-6xl mx-auto">
-                <h2 className="text-3xl font-semibold mb-6">Your Profile</h2>
+                {/* Header with centered title and right-aligned action buttons */}
+                <div className="relative m-4 flex items-center justify-center mb-8">
+                    <h2 className="text-3xl font-bold">Your Profile</h2>
+                    <div className="absolute right-0 flex gap-2">
+                        {!isAdmin && (
+                            <button
+                                onClick={handleDeleteAccount}
+                                className="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700"
+                            >
+                                Delete Account
+                            </button>
+                        )}
+                        {isAdmin && (
+                            <button
+                                onClick={handleRestartDatabase}
+                                className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
+                            >
+                                Restart Database
+                            </button>
+                        )}
+                    </div>
+                </div>
 
                 {/* Side-by-side grid layout */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -451,48 +472,6 @@ export default function ProfilePage() {
                         </div>
                     </div>
                 </div>
-
-                {/* Account Actions Section */}
-                {!isAdmin && (
-                    <div className="bg-white p-6 rounded shadow">
-                        <h3 className="text-xl font-semibold text-red-600 mb-4">Account Actions</h3>
-                        <div className="flex gap-2">
-                            <button
-                                onClick={handleDeleteAccount}
-                                className="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700"
-                            >
-                                Delete Account
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => navigate(-1)}
-                                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                )}
-                {isAdmin && (
-                    <div className="bg-white p-6 rounded shadow">
-                        <h3 className="text-xl font-semibold text-red-600 mb-4">Admin Actions</h3>
-                        <div className="flex gap-2">
-                            <button
-                                onClick={handleRestartDatabase}
-                                className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-900"
-                            >
-                                Restart Database
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => navigate(-1)}
-                                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                )}
             </main>
         </div>
     );
