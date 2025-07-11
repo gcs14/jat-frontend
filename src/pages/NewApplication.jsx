@@ -621,9 +621,9 @@ export default function NewApplication() {
       if (form.followUpDate) {
         formData.append('FollowUpDate', form.followUpDate);
       }
-
+      
       formData.append('InterviewScheduled', form.interviewScheduled.toString());
-
+      
       if (form.interviewScheduled && form.interviewDate) {
         formData.append('InterviewDate', form.interviewDate);
       }
@@ -632,7 +632,7 @@ export default function NewApplication() {
       if (form.useExisting === 'upload' && form.resumeFile) {
         formData.append('ResumeFile', form.resumeFile);
       } else if (form.useExisting === 'existing' && form.resumeId) {
-        formData.append('ResumeId', form.resumeId);
+        formData.append('ResumeId', parseInt(form.resumeId));
       }
 
       const response = await axios.post('https://jat.azurewebsites.net/api/applications', formData, {
@@ -647,9 +647,9 @@ export default function NewApplication() {
     } catch (err) {
       console.error('Full error:', err);
       console.error('Response data:', err.response?.data);
-
+      
       let message = 'Submission failed.';
-
+      
       if (err.response?.data?.message) {
         message = err.response.data.message;
       } else if (err.response?.data?.detail) {
@@ -667,7 +667,7 @@ export default function NewApplication() {
       } else if (err.message) {
         message = err.message;
       }
-
+      
       setError(message);
     } finally {
       setIsSubmitting(false);
@@ -937,10 +937,11 @@ export default function NewApplication() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`mt-4 px-6 py-2 rounded shadow text-white ${isSubmitting
-                ? 'bg-gray-400 cursor-not-allowed'
+            className={`mt-4 px-6 py-2 rounded shadow text-white ${
+              isSubmitting 
+                ? 'bg-gray-400 cursor-not-allowed' 
                 : 'bg-blue-600 hover:bg-blue-700'
-              }`}
+            }`}
           >
             {isSubmitting ? 'Submitting...' : 'Submit Application'}
           </button>
