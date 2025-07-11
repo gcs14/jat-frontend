@@ -212,14 +212,14 @@ export default function ApplicationsPage() {
             </header>
 
             <div className="relative m-4 flex items-center justify-center">
-                <div className="absolute left-0 gap-4">
+                <div className="absolute left-0 flex items-center space-x-4">
                     <Link to="/applications/new">
                         <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 shadow-sm">
                             New Application
                         </button>
                     </Link>
                     <Link to="/followups">
-                        <button className="bg-indigo-600 text-white text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition duration-200 shadow-sm">
+                        <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition duration-200 shadow-sm">
                             View Follow-Ups
                         </button>
                     </Link>
@@ -235,15 +235,12 @@ export default function ApplicationsPage() {
                     />
                     <button
                         onClick={handleDownloadCSV}
-                        className="bg-grey-600 text-white px-4 py-2 rounded-lg hover:bg-grey-700 transition duration-200 shadow-sm"
+                        className="bg-slate-600 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition duration-200 shadow-sm"
                         disabled={sortedAndFiltered.length === 0}
                         title={sortedAndFiltered.length === 0 ? 'No applications to export' : 'Export to CSV'}
                     >
                         Export CSV
                     </button>
-                    {/* <div className="text-sm text-gray-600 bg-white px-3 py-2 rounded-lg border border-gray-200 shadow-sm">
-                        {sortedAndFiltered.length} application{sortedAndFiltered.length !== 1 ? 's' : ''}
-                    </div> */}
                 </div>
             </div>
 
