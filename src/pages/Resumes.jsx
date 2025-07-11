@@ -2,6 +2,17 @@ import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
+const getDisplayFileType = (mimeType) => {
+    const typeMap = {
+        'application/pdf': 'PDF',
+        'application/msword': 'DOC',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'DOCX',
+        'text/plain': 'TXT'
+    };
+
+    return typeMap[mimeType] || mimeType.split('/').pop().toUpperCase();
+};
+
 export default function ResumesPage() {
     const [resumes, setResumes] = useState([]);
     const [error, setError] = useState('');
@@ -63,7 +74,6 @@ export default function ResumesPage() {
             }
         }
     };
-
 
     const handleDownload = async (id, fileName, filePath) => {
         if (!filePath) {
@@ -175,9 +185,9 @@ export default function ResumesPage() {
                                 )}
                                 <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">{resume.fileName}</td>
                                 <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                    {resume.fileType.startsWith('application/')
-                                        ? resume.fileType.replace('application/', '')
-                                        : resume.fileType}
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        {getDisplayFileType(resume.fileType)}
+                                    </span>
                                 </td>
                                 <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">{(resume.fileSize / 1024).toFixed(1)} KB</td>
                                 <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
