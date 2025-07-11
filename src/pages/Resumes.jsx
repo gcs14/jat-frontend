@@ -454,9 +454,9 @@ export default function ResumesPage() {
                         onChange={e => setSearchTerm(e.target.value)}
                         className="border border-gray-300 rounded-lg p-2 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
-                    <div className="text-sm text-gray-600 bg-white px-3 py-2 rounded-lg border border-gray-200 shadow-sm">
+                    {/* <div className="text-sm text-gray-600 bg-white px-3 py-2 rounded-lg border border-gray-200 shadow-sm">
                         {sortedAndFilteredResumes.length} resume{sortedAndFilteredResumes.length !== 1 ? 's' : ''}
-                    </div>
+                    </div> */}
                 </div>
             </div>
 

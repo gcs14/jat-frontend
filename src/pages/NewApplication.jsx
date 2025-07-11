@@ -933,31 +933,6 @@ export default function NewApplication() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Status
-                  </label>
-                  <select
-                    name="status"
-                    value={form.status}
-                    onChange={onChange}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="Pending">Pending</option>
-                    <option value="Applied">Applied</option>
-                    <option value="Interview">Interview</option>
-                    <option value="Offer">Offer</option>
-                    <option value="Rejected">Rejected</option>
-                    <option value="Withdrawn">Withdrawn</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            {/* Additional Information */}
-            <div className="border-b border-gray-200 pb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Salary Range
                   </label>
                   <input
@@ -969,20 +944,12 @@ export default function NewApplication() {
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Follow Up Date
-                  </label>
-                  <input
-                    type="date"
-                    name="followUpDate"
-                    value={form.followUpDate}
-                    onChange={onChange}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
               </div>
+            </div>
 
+            {/* Additional Information */}
+            <div className="border-b border-gray-200 pb-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Information</h3>
               {/* Interview Section */}
               <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
                 <div className="flex items-center mb-3">
@@ -1009,6 +976,22 @@ export default function NewApplication() {
                     />
                   </div>
                 )}
+              </div>
+
+              {/* Follow Up */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Follow Up Date
+                  </label>
+                  <input
+                    type="date"
+                    name="followUpDate"
+                    value={form.followUpDate}
+                    onChange={onChange}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
               </div>
             </div>
 
@@ -1040,8 +1023,8 @@ export default function NewApplication() {
                 type="submit"
                 disabled={isSubmitting}
                 className={`px-6 py-2 rounded-lg font-medium transition duration-200 ${isSubmitting
-                    ? 'bg-gray-400 text-white cursor-not-allowed'
-                    : 'bg-blue-600 text-white hover:bg-blue-700 shadow-sm'
+                  ? 'bg-gray-400 text-white cursor-not-allowed'
+                  : 'bg-blue-600 text-white hover:bg-blue-700 shadow-sm'
                   }`}
               >
                 {isSubmitting ? (

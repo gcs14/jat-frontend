@@ -235,9 +235,9 @@ export default function ApplicationsPage() {
                     >
                         Export CSV
                     </button>
-                    <div className="text-sm text-gray-600 bg-white px-3 py-2 rounded-lg border border-gray-200 shadow-sm">
+                    {/* <div className="text-sm text-gray-600 bg-white px-3 py-2 rounded-lg border border-gray-200 shadow-sm">
                         {sortedAndFiltered.length} application{sortedAndFiltered.length !== 1 ? 's' : ''}
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
