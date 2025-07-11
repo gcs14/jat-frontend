@@ -9,6 +9,7 @@ const getStatusColor = (status) => {
         'Pending': 'bg-yellow-100 text-yellow-700 border-yellow-200',
         'Applied': 'bg-blue-100 text-blue-700 border-blue-200',
         'Interview': 'bg-purple-100 text-purple-700 border-purple-200',
+        'Interviewing': 'bg-purple-100 text-purple-700 border-purple-200',
         'Offer': 'bg-green-100 text-green-700 border-green-200',
         'Rejected': 'bg-red-100 text-red-700 border-red-200',
         'Withdrawn': 'bg-gray-100 text-gray-700 border-gray-200'
@@ -211,14 +212,14 @@ export default function ApplicationsPage() {
             </header>
 
             <div className="relative m-4 flex items-center justify-center">
-                <div className="absolute left-0">
+                <div className="absolute left-0 gap-4">
                     <Link to="/applications/new">
                         <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 shadow-sm">
                             New Application
                         </button>
                     </Link>
-                    <Link to="/applications">
-                        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 shadow-sm">
+                    <Link to="/followups">
+                        <button className="bg-indigo-600 text-white text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition duration-200 shadow-sm">
                             View Follow-Ups
                         </button>
                     </Link>
@@ -234,7 +235,7 @@ export default function ApplicationsPage() {
                     />
                     <button
                         onClick={handleDownloadCSV}
-                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200 shadow-sm"
+                        className="bg-grey-600 text-white px-4 py-2 rounded-lg hover:bg-grey-700 transition duration-200 shadow-sm"
                         disabled={sortedAndFiltered.length === 0}
                         title={sortedAndFiltered.length === 0 ? 'No applications to export' : 'Export to CSV'}
                     >
