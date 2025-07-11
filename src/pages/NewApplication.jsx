@@ -522,6 +522,7 @@ export default function NewApplication() {
 
   const [resumes, setResumes] = useState([]);
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -563,70 +564,113 @@ export default function NewApplication() {
   const onSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setIsSubmitting(true);
 
     try {
       const token = localStorage.getItem('token');
 
       // Validation
       if (
-        !form.companyName ||
-        !form.jobTitle ||
+        !form.companyName.trim() ||
+        !form.jobTitle.trim() ||
         !form.dateApplied ||
-        !form.jobLocation ||
+        !form.jobLocation.trim() ||
         !form.employmentType ||
         !form.workModel
       ) {
         setError('Please fill out all required fields.');
+        setIsSubmitting(false);
         return;
       }
 
       if (form.useExisting === 'upload' && !form.resumeFile) {
         setError('Please select a resume file to upload.');
+        setIsSubmitting(false);
         return;
       }
 
       if (form.useExisting === 'existing' && !form.resumeId) {
         setError('Please select an existing resume.');
+        setIsSubmitting(false);
         return;
       }
 
-      // Create FormData
+      // Create FormData with exact property names matching ApplicationDto
       const formData = new FormData();
-      formData.append('CompanyName', form.companyName);
-      formData.append('JobTitle', form.jobTitle);
+      formData.append('CompanyName', form.companyName.trim());
+      formData.append('JobTitle', form.jobTitle.trim());
       formData.append('DateApplied', form.dateApplied);
-      formData.append('PostingDate', form.postingDate || '');
-      formData.append('ClosingDate', form.closingDate || '');
-      formData.append('JobLocation', form.jobLocation);
+      formData.append('JobLocation', form.jobLocation.trim());
       formData.append('EmploymentType', form.employmentType);
       formData.append('WorkModel', form.workModel);
       formData.append('Status', form.status || 'Pending');
-      formData.append('SalaryRange', form.salaryRange || '');
-      formData.append('Description', form.description || '');
-      formData.append('FollowUpDate', form.followUpDate || '');
-      formData.append('InterviewScheduled', form.interviewScheduled);
-      formData.append('InterviewDate', form.interviewDate || '');
 
+      // Optional fields - only append if they have values
+      if (form.postingDate) {
+        formData.append('PostingDate', form.postingDate);
+      }
+      if (form.closingDate) {
+        formData.append('ClosingDate', form.closingDate);
+      }
+      if (form.salaryRange && form.salaryRange.trim()) {
+        formData.append('SalaryRange', form.salaryRange.trim());
+      }
+      if (form.description && form.description.trim()) {
+        formData.append('Description', form.description.trim());
+      }
+      if (form.followUpDate) {
+        formData.append('FollowUpDate', form.followUpDate);
+      }
+
+      formData.append('InterviewScheduled', form.interviewScheduled.toString());
+
+      if (form.interviewScheduled && form.interviewDate) {
+        formData.append('InterviewDate', form.interviewDate);
+      }
+
+      // Handle resume
       if (form.useExisting === 'upload' && form.resumeFile) {
         formData.append('ResumeFile', form.resumeFile);
       } else if (form.useExisting === 'existing' && form.resumeId) {
         formData.append('ResumeId', form.resumeId);
       }
 
-      await axios.post('https://jat.azurewebsites.net/api/applications', formData, {
+      const response = await axios.post('https://jat.azurewebsites.net/api/applications', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          // Don't set Content-Type - let browser set it for FormData
+          // Don't set Content-Type - let axios set it with boundary for FormData
         }
       });
 
+      console.log('Success:', response.data);
       navigate('/');
     } catch (err) {
-      console.error(err);
-      const message = err.response?.data?.message ||
-        err.response?.data?.errors?.[Object.keys(err.response?.data?.errors || {})[0]]?.[0] ||
-        'Submission failed.';
+      console.error('Full error:', err);
+      console.error('Response data:', err.response?.data);
+
+      let message = 'Submission failed.';
+
+      if (err.response?.data?.message) {
+        message = err.response.data.message;
+      } else if (err.response?.data?.detail) {
+        message = err.response.data.detail;
+      } else if (err.response?.data?.errors) {
+        const errors = err.response.data.errors;
+        if (typeof errors === 'object') {
+          const firstError = Object.values(errors)[0];
+          if (Array.isArray(firstError)) {
+            message = firstError[0];
+          } else {
+            message = firstError;
+          }
+        }
+      } else if (err.message) {
+        message = err.message;
+      }
+
       setError(message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -652,7 +696,11 @@ export default function NewApplication() {
 
       <div className="max-w-3xl mx-auto mt-8 p-6 bg-white rounded shadow">
         <h2 className="text-2xl font-semibold mb-4">New Application</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -785,10 +833,10 @@ export default function NewApplication() {
                 required
                 className="mt-1 block w-full border rounded p-2"
               >
-                <option>Full-time</option>
-                <option>Part-time</option>
-                <option>Contract</option>
-                <option>Internship</option>
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Contract">Contract</option>
+                <option value="Internship">Internship</option>
               </select>
             </div>
           </div>
@@ -803,9 +851,9 @@ export default function NewApplication() {
                 required
                 className="mt-1 block w-full border rounded p-2"
               >
-                <option>Remote</option>
-                <option>On-site</option>
-                <option>Hybrid</option>
+                <option value="Remote">Remote</option>
+                <option value="On-site">On-site</option>
+                <option value="Hybrid">Hybrid</option>
               </select>
             </div>
             <div>
@@ -816,12 +864,12 @@ export default function NewApplication() {
                 onChange={onChange}
                 className="mt-1 block w-full border rounded p-2"
               >
-                <option>Pending</option>
-                <option>Applied</option>
-                <option>Interview</option>
-                <option>Offer</option>
-                <option>Rejected</option>
-                <option>Withdrawn</option>
+                <option value="Pending">Pending</option>
+                <option value="Applied">Applied</option>
+                <option value="Interview">Interview</option>
+                <option value="Offer">Offer</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Withdrawn">Withdrawn</option>
               </select>
             </div>
           </div>
@@ -888,9 +936,13 @@ export default function NewApplication() {
 
           <button
             type="submit"
-            className="mt-4 bg-blue-600 text-white px-6 py-2 rounded shadow hover:bg-blue-700"
+            disabled={isSubmitting}
+            className={`mt-4 px-6 py-2 rounded shadow text-white ${isSubmitting
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-blue-600 hover:bg-blue-700'
+              }`}
           >
-            Submit Application
+            {isSubmitting ? 'Submitting...' : 'Submit Application'}
           </button>
         </form>
       </div>
