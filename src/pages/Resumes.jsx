@@ -185,11 +185,9 @@ export default function ResumesPage() {
                                 )}
                                 <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">{resume.fileName}</td>
                                 <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                        {getDisplayFileType(resume.fileType)}
-                                    </span>
+                                    {getDisplayFileType(resume.fileType)}
                                 </td>
-                                <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">{(resume.fileSize / 1024).toFixed(1)} KB</td>
+                                <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">{(resume.fileSize / (1024 * 1024)).toFixed(2)} MB</td>
                                 <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
                                     {resume.uploadDate ? new Date(resume.uploadDate).toLocaleDateString() : 'N/A'}
                                 </td>
