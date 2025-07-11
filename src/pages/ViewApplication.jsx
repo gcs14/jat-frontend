@@ -31,9 +31,14 @@ function ViewApplication() {
     }, [id]);
 
     const handleResumeDownload = async () => {
+        if (!application.resumeId) {
+            alert("No resume associated with this application.");
+            return;
+        }
+
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.get(`https://jat.azurewebsites.net/api/resumes/download-by-app/${application.applicationId}`, {
+            const response = await axios.get(`https://jat.azurewebsites.net/api/resumes/${application.resumeId}/download`, {
                 responseType: 'blob',
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -48,7 +53,18 @@ function ViewApplication() {
             window.URL.revokeObjectURL(url);
         } catch (error) {
             console.error('Download failed:', error);
-            alert("Failed to download resume. This may be a demo file.");
+
+            let errorMessage = "Failed to download resume. Please try again.";
+
+            if (error.response?.status === 404) {
+                errorMessage = "Resume file not found on server. The file may have been moved or deleted.";
+            } else if (error.response?.status === 403) {
+                errorMessage = "You don't have permission to download this resume.";
+            } else if (error.response?.status === 500) {
+                errorMessage = "Server error occurred while trying to download the resume.";
+            }
+
+            alert(errorMessage);
         }
     };
 
