@@ -53,41 +53,27 @@ function RegisterPage() {
     if (!validate()) return;
 
     try {
-      const emailCheckResponse = await fetch(
-        `https://jat.azurewebsites.net/users/exists?email=${encodeURIComponent(email)}`
-      );
-      const { exists } = await emailCheckResponse.json();
-
-      if (exists) {
-        alert("An account with this email already exists.");
-        return; // Stop submission
-      }
-    } catch (error) {
-      console.error("Error checking email:", error);
-      alert("Something went wrong. Please try again.");
-      return;
-    }
-
-    try {
-      const response = await fetch('https://jat.azurewebsites.net/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, phoneNumber, password }),
+      const response = await fetch("https://jat.azurewebsites.net/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password, phoneNumber }),
       });
 
+      const result = await response.text();
+
       if (response.ok) {
-        if (response.status !== 204) {
-          const data = await response.json();
-          console.log('Registration successful', data);
-        } else {
-          console.log('Registration successful (204 No Content)');
-        }
+        alert("User registered successfully!");
+        navigate("/login");
+      } else if (response.status === 400 && result === "User already exists.") {
+        alert("This email is already in use.");
       } else {
-        const errorText = await response.text();
-        console.error('Registration failed:', errorText);
+        alert("Registration failed: " + result);
       }
     } catch (error) {
-      console.error('Error during registration', error);
+      console.error("Registration error:", error);
+      alert("An error occurred while registering.");
     }
   };
 
