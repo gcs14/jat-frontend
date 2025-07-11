@@ -135,7 +135,6 @@ function LoginPage() {
     setErrorMessage('');
     setIsSubmitting(true);
 
-    // Client-side validation
     if (!email.trim() || !password.trim()) {
       setErrorMessage('Please fill in all fields.');
       setIsSubmitting(false);
@@ -190,15 +189,15 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-6">
         <div className="text-center">
           <div className="mx-auto h-16 w-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
             <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
             </svg>
           </div>
-          <h1 className="mt-6 text-3xl font-bold text-gray-900">
+          <h1 className="mt-4 text-3xl font-bold text-gray-900">
             Job Application Tracker
           </h1>
           <p className="mt-2 text-sm text-gray-600">
@@ -206,8 +205,8 @@ function LoginPage() {
           </p>
         </div>
 
-        <div className="bg-white py-8 px-6 shadow-lg rounded-lg border border-gray-200">
-          <form onSubmit={handleLogin} className="space-y-6">
+        <div className="bg-white py-6 px-6 shadow-lg rounded-lg border border-gray-200">
+          <form onSubmit={handleLogin} className="space-y-5">
             {errorMessage && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
                 <div className="flex items-center">
