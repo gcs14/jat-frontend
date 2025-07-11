@@ -33,8 +33,8 @@ function RegisterPage() {
 
     if (!password) {
       newErrors.password = 'Password is required.';
-    } else if (password.length < 5) {
-      newErrors.password = 'Password must be at least 5 characters.';
+    } else if (password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters.';
     } else if (/(.)\1\1/.test(password)) {
       newErrors.password = 'No character can repeat 3 or more times in a row.';
     }
