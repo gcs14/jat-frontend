@@ -196,7 +196,7 @@ function ViewApplication() {
             'Offered': 'bg-green-100 text-green-800',
             'Rejected': 'bg-red-100 text-red-800'
         };
-
+        
         return (
             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClasses[status] || 'bg-gray-100 text-gray-800'}`}>
                 {status}
@@ -237,7 +237,7 @@ function ViewApplication() {
                         </div>
                         <h2 className="text-xl font-semibold text-gray-900 mb-2">Application Not Found</h2>
                         <p className="text-gray-600 mb-6">{error || "The requested application could not be found."}</p>
-                        <Link
+                        <Link 
                             to="/applications"
                             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
                         >
@@ -265,7 +265,7 @@ function ViewApplication() {
             <div className="max-w-4xl mx-auto mt-8 p-6">
                 <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-8">
                     <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-bold text-gray-900">Application Details</h2>
+                        <h1 className="text-3xl font-bold text-gray-900">Application Details</h1>
                         <div className="flex items-center space-x-3">
                             {getStatusBadge(application.status)}
                             <Link
@@ -283,7 +283,7 @@ function ViewApplication() {
                     {/* Basic Information */}
                     <div className="border-b border-gray-200 pb-6 mb-6">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
-                        <div className="flex items-center space-x-6">
+                        <div className={`grid gap-6 ${isAdmin ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-1 md:grid-cols-2'}`}>
                             {isAdmin && (
                                 <div>
                                     <label className="block text-sm font-medium text-gray-500 mb-1">Created By</label>
@@ -381,7 +381,7 @@ function ViewApplication() {
                     {/* Additional Information */}
                     <div className="border-b border-gray-200 pb-6 mb-6">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Information</h3>
-
+                        
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Interview Section */}
                             <div>
