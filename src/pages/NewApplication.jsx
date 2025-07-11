@@ -650,6 +650,7 @@ export default function NewApplication() {
 
       let message = 'Submission failed.';
 
+      // Handle different error response structures
       if (err.response?.data?.message) {
         message = err.response.data.message;
       } else if (err.response?.data?.detail) {
@@ -664,8 +665,17 @@ export default function NewApplication() {
             message = firstError;
           }
         }
+      } else if (err.response?.data && typeof err.response.data === 'string') {
+        // Handle case where error is returned as plain string
+        message = err.response.data;
       } else if (err.message) {
         message = err.message;
+      }
+
+      // Special handling for duplicate resume message
+      if (message.includes('This resume has already been uploaded') ||
+        message.includes('Duplicate resume already exists')) {
+        message = 'This resume has already been uploaded to your account. Please select a different file or choose an existing resume from the dropdown.';
       }
 
       setError(message);
@@ -689,7 +699,6 @@ export default function NewApplication() {
         <nav>
           <Link to="/" className="text-blue-600 hover:underline mx-2">Home</Link>
           <Link to="/applications" className="text-blue-600 hover:underline mx-2">Applications</Link>
-          <Link to="/resumes" className="text-blue-600 hover:underline mx-2">Resumes</Link>
           <Link to="/profile" className="text-blue-600 hover:underline mx-2">Profile</Link>
           <button onClick={handleLogout} className="text-red-500 hover:underline mx-2">Logout</button>
         </nav>
@@ -858,17 +867,6 @@ export default function NewApplication() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium">Salary Range</label>
-              <input
-                type="text"
-                name="salaryRange"
-                value={form.salaryRange}
-                onChange={onChange}
-                placeholder="e.g., $80,000 - $100,000"
-                className="mt-1 block w-full border rounded p-2"
-              />
-            </div>
-            {/* <div>
               <label className="block text-sm font-medium">Status</label>
               <select
                 name="status"
@@ -883,10 +881,10 @@ export default function NewApplication() {
                 <option value="Rejected">Rejected</option>
                 <option value="Withdrawn">Withdrawn</option>
               </select>
-            </div> */}
+            </div>
           </div>
 
-          {/* <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium">Salary Range</label>
               <input
@@ -908,7 +906,7 @@ export default function NewApplication() {
                 className="mt-1 block w-full border rounded p-2"
               />
             </div>
-          </div> */}
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center">
