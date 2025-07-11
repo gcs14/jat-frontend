@@ -101,18 +101,40 @@ export default function ResumesPage() {
         }
     };
 
-    const handleDownload = async (id, fileName, filePath) => {
-        if (!filePath) {
-            alert("This resume is part of a demo and cannot be downloaded.");
-            return;
-        }
+    // const handleDownload = async (id, fileName, filePath) => {
+    //     if (!filePath) {
+    //         alert("This resume is part of a demo and cannot be downloaded.");
+    //         return;
+    //     }
 
+    //     const token = localStorage.getItem('token');
+    //     try {
+    //         const response = await axios.get(`https://jat.azurewebsites.net/api/resumes/${id}/download`, {
+    //             responseType: 'blob',
+    //             headers: { Authorization: `Bearer ${token}` }
+    //         });
+    //         const url = window.URL.createObjectURL(new Blob([response.data]));
+    //         const link = document.createElement('a');
+    //         link.href = url;
+    //         link.setAttribute('download', fileName || 'resume.pdf');
+    //         document.body.appendChild(link);
+    //         link.click();
+    //         link.remove();
+    //         window.URL.revokeObjectURL(url);
+    //     } catch {
+    //         alert("Failed to download resume.");
+    //     }
+    // };
+
+    const handleDownload = async (id, fileName) => {
         const token = localStorage.getItem('token');
         try {
             const response = await axios.get(`https://jat.azurewebsites.net/api/resumes/${id}/download`, {
                 responseType: 'blob',
                 headers: { Authorization: `Bearer ${token}` }
             });
+
+            // Create a blob URL and trigger download
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -121,8 +143,13 @@ export default function ResumesPage() {
             link.click();
             link.remove();
             window.URL.revokeObjectURL(url);
-        } catch {
-            alert("Failed to download resume.");
+        } catch (error) {
+            console.error('Download failed:', error);
+            if (error.response?.status === 404) {
+                alert("Resume file not found. This may be a demo file that was not properly stored.");
+            } else {
+                alert("Failed to download resume. Please try again.");
+            }
         }
     };
 
@@ -321,8 +348,15 @@ export default function ResumesPage() {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-center">
                                     <div className="flex justify-center space-x-2">
-                                        <button
+                                        {/* <button
                                             onClick={() => handleDownload(resume.resumeId, resume.fileName, resume.filePath)}
+                                            className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition duration-200 text-xs font-medium shadow-sm"
+                                            title="Download resume"
+                                        >
+                                            Download
+                                        </button> */}
+                                        <button
+                                            onClick={() => handleDownload(resume.resumeId, resume.fileName)}
                                             className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition duration-200 text-xs font-medium shadow-sm"
                                             title="Download resume"
                                         >

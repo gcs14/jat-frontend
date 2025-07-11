@@ -30,6 +30,28 @@ function ViewApplication() {
         fetchApplication();
     }, [id]);
 
+    const handleResumeDownload = async () => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await axios.get(`https://jat.azurewebsites.net/api/resumes/download-by-app/${application.applicationId}`, {
+                responseType: 'blob',
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', application.resumeName || 'resume.pdf');
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Download failed:', error);
+            alert("Failed to download resume. This may be a demo file.");
+        }
+    };
+
     const handleLogout = () => {
         const confirmed = window.confirm("Are you sure you want to logout?");
         if (confirmed) {
@@ -201,11 +223,20 @@ function ViewApplication() {
                                             <p className="text-sm text-gray-500">Resume file</p>
                                         </div>
                                     </div>
-                                    <button
+                                    {/* <button
                                         className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
                                         onClick={() => {
                                             alert("This resume is part of a demo and cannot be downloaded.");
                                         }}
+                                    >
+                                        <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                                        </svg>
+                                        Download
+                                    </button> */}
+                                    <button
+                                        className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                                        onClick={handleResumeDownload}
                                     >
                                         <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
