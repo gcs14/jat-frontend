@@ -689,6 +689,7 @@ export default function NewApplication() {
         <nav>
           <Link to="/" className="text-blue-600 hover:underline mx-2">Home</Link>
           <Link to="/applications" className="text-blue-600 hover:underline mx-2">Applications</Link>
+          <Link to="/resumes" className="text-blue-600 hover:underline mx-2">Resumes</Link>
           <Link to="/profile" className="text-blue-600 hover:underline mx-2">Profile</Link>
           <button onClick={handleLogout} className="text-red-500 hover:underline mx-2">Logout</button>
         </nav>
@@ -856,7 +857,7 @@ export default function NewApplication() {
                 <option value="Hybrid">Hybrid</option>
               </select>
             </div>
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium">Status</label>
               <select
                 name="status"
@@ -872,7 +873,7 @@ export default function NewApplication() {
                 <option value="Withdrawn">Withdrawn</option>
               </select>
             </div>
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -886,7 +887,7 @@ export default function NewApplication() {
                 className="mt-1 block w-full border rounded p-2"
               />
             </div>
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium">Follow Up Date</label>
               <input
                 type="date"
@@ -896,7 +897,7 @@ export default function NewApplication() {
                 className="mt-1 block w-full border rounded p-2"
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center">
