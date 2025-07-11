@@ -53,6 +53,22 @@ function RegisterPage() {
     if (!validate()) return;
 
     try {
+      const emailCheckResponse = await fetch(
+        `https://jat.azurewebsites.net/users/exists?email=${encodeURIComponent(email)}`
+      );
+      const { exists } = await emailCheckResponse.json();
+
+      if (exists) {
+        alert("An account with this email already exists.");
+        return; // Stop submission
+      }
+    } catch (error) {
+      console.error("Error checking email:", error);
+      alert("Something went wrong. Please try again.");
+      return;
+    }
+
+    try {
       const response = await fetch('https://jat.azurewebsites.net/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
