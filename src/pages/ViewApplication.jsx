@@ -283,7 +283,13 @@ function ViewApplication() {
                     {/* Basic Information */}
                     <div className="border-b border-gray-200 pb-6 mb-6">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="flex items-center space-x-6">
+                            {isAdmin && (
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-500 mb-1">Created By</label>
+                                    <p className="text-lg text-gray-900">{application.userFullName || "Not specified"}</p>
+                                </div>
+                            )}
                             <div>
                                 <label className="block text-sm font-medium text-gray-500 mb-1">Company Name</label>
                                 <p className="text-lg text-gray-900">{application.companyName || "Not specified"}</p>
@@ -363,7 +369,7 @@ function ViewApplication() {
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-500 mb-1">Application Status</label>
-                                <div>{getStatusBadge(application.status)}</div>
+                                <p className="text-gray-900">{application.status || "Not specified"}</p>
                             </div>
                             <div className="md:col-span-2">
                                 <label className="block text-sm font-medium text-gray-500 mb-1">Salary Range</label>
@@ -378,31 +384,13 @@ function ViewApplication() {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Interview Section */}
-                            <div className={`rounded-lg p-4 border ${application.interviewScheduled ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'}`}>
-                                <div className="flex items-center mb-2">
-                                    <div className={`w-5 h-5 rounded mr-3 flex items-center justify-center ${application.interviewScheduled ? 'bg-blue-600' : 'bg-gray-400'}`}>
-                                        {application.interviewScheduled && (
-                                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                            </svg>
-                                        )}
-                                    </div>
-                                    <label className="font-medium text-gray-900">Interview Scheduled</label>
-                                </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-500 mb-1">Interview Scheduled</label>
+                                <p className="text-gray-900 mb-3">{application.interviewScheduled ? "Yes" : "No"}</p>
                                 {application.interviewScheduled && application.interviewDate && (
-                                    <div className="ml-8">
+                                    <div>
                                         <label className="block text-sm font-medium text-gray-500 mb-1">Interview Date & Time</label>
                                         <p className="text-gray-900">{formatDateTime(application.interviewDate)}</p>
-                                    </div>
-                                )}
-                                {application.interviewScheduled && !application.interviewDate && (
-                                    <div className="ml-8">
-                                        <p className="text-sm text-gray-600">Date/time not specified</p>
-                                    </div>
-                                )}
-                                {!application.interviewScheduled && (
-                                    <div className="ml-8">
-                                        <p className="text-sm text-gray-600">No interview scheduled</p>
                                     </div>
                                 )}
                             </div>
@@ -426,12 +414,12 @@ function ViewApplication() {
                     )}
 
                     {/* Admin Section */}
-                    {isAdmin && (
+                    {isAdmin && application.userFullName && (
                         <div className="border-b border-gray-200 pb-6 mb-6">
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">Admin Information</h3>
                             <div>
-                                <label className="block text-sm font-medium text-gray-500 mb-1">User</label>
-                                <p className="text-gray-900">{application.userFullName || "Not specified"}</p>
+                                <label className="block text-sm font-medium text-gray-500 mb-1">Additional Details</label>
+                                <p className="text-gray-900">Created by {application.userFullName}</p>
                             </div>
                         </div>
                     )}
