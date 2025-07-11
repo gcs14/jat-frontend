@@ -716,30 +716,34 @@ function EditApplication() {
 
                                 {/* Follow Up */}
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Follow Up Date
-                                    </label>
-                                    <input
-                                        type="date"
-                                        name="followupDate"
-                                        value={form.followupDate}
-                                        onChange={handleChange}
-                                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-2"
-                                    />
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                                            Quick Follow-up
-                                        </label>
-                                        <select
-                                            name="followupDays"
-                                            onChange={handleChange}
-                                            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        >
-                                            <option value="">Select days from application date</option>
-                                            <option value="3">3 days</option>
-                                            <option value="5">5 days</option>
-                                            <option value="7">7 days</option>
-                                        </select>
+                                    <div className="grid grid-cols-10 gap-2">
+                                        <div className="col-span-7">
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                Follow Up Date
+                                            </label>
+                                            <input
+                                                type="date"
+                                                name="followupDate"
+                                                value={form.followupDate}
+                                                onChange={handleChange}
+                                                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            />
+                                        </div>
+                                        <div className="col-span-3">
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                Quick Follow-up
+                                            </label>
+                                            <select
+                                                name="followupDays"
+                                                onChange={handleChange}
+                                                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            >
+                                                <option value="">Days</option>
+                                                <option value="3">3d</option>
+                                                <option value="5">5d</option>
+                                                <option value="7">7d</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
