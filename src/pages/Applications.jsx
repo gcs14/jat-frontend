@@ -217,6 +217,11 @@ export default function ApplicationsPage() {
                             New Application
                         </button>
                     </Link>
+                    <Link to="/applications">
+                        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 shadow-sm">
+                            View Follow-Ups
+                        </button>
+                    </Link>
                 </div>
                 <h2 className="text-3xl font-bold">My Applications</h2>
                 <div className="absolute right-0 flex items-center space-x-3">
