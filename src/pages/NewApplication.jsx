@@ -54,12 +54,23 @@ export default function NewApplication() {
     }
   };
 
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       resumeFileName: file.name // Only capture the filename
+  //     }));
+  //   }
+  // };
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData((prev) => ({
+      setForm((prev) => ({
         ...prev,
-        resumeFileName: file.name // Only capture the filename
+        resumeFile: file,
+        resumeFileName: file.name, // Save just the filename
       }));
     }
   };
