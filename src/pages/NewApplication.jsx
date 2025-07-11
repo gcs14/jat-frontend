@@ -50,49 +50,15 @@ export default function NewApplication() {
     }
   };
 
-  // const onSubmit = async e => {
-  //   e.preventDefault();
-  //   setError('');
-
-  //   try {
-  //     const token = localStorage.getItem('token');
-
-  //     const payload = {
-  //       companyName: form.companyName,
-  //       jobTitle: form.jobTitle,
-  //       dateApplied: form.dateApplied,
-  //       postingDate: form.postingDate || null,
-  //       closingDate: form.closingDate || null,
-  //       jobLocation: form.jobLocation,
-  //       employmentType: form.employmentType,
-  //       workModel: form.workModel,
-  //       resumeFileName: form.resumeFileName || null,
-  //       salaryRange: form.salaryRange || null,
-  //       description: form.description || null,
-  //     };
-
-  //     if (form.useExisting === 'upload' && form.resumeFile) {
-  //       payload.resumeFileName = form.resumeFile.name; // only filename
-  //     } else if (form.useExisting === 'existing' && form.resumeId) {
-  //       payload.resumeId = form.resumeId;
-  //     } else {
-  //       setError('Please select or upload a resume.');
-  //       return;
-  //     }
-
-  //     await axios.post('https://jat.azurewebsites.net/api/applications', payload, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         'Content-Type': 'application/json'
-  //       }
-  //     });
-
-  //     navigate('/');
-  //   } catch (err) {
-  //     console.error(err);
-  //     setError(err.response?.data?.message || 'Submission failed');
-  //   }
-  // };
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData((prev) => ({
+        ...prev,
+        resumeFileName: file.name // Only capture the filename
+      }));
+    }
+  };
 
   const onSubmit = async e => {
     e.preventDefault();
@@ -100,33 +66,34 @@ export default function NewApplication() {
 
     try {
       const token = localStorage.getItem('token');
-      const formData = new FormData();
 
-      formData.append('companyName', form.companyName);
-      formData.append('jobTitle', form.jobTitle);
-      formData.append('dateApplied', form.dateApplied);
-      formData.append('postingDate', form.postingDate || '');
-      formData.append('closingDate', form.closingDate || '');
-      formData.append('jobLocation', form.jobLocation);
-      formData.append('employmentType', form.employmentType);
-      formData.append('workModel', form.workModel);
-      formData.append('salaryRange', form.salaryRange || '');
-      formData.append('description', form.description || '');
+      const payload = {
+        companyName: form.companyName,
+        jobTitle: form.jobTitle,
+        dateApplied: form.dateApplied,
+        postingDate: form.postingDate || null,
+        closingDate: form.closingDate || null,
+        jobLocation: form.jobLocation,
+        employmentType: form.employmentType,
+        workModel: form.workModel,
+        resumeFileName: form.resumeFileName || null,
+        salaryRange: form.salaryRange || null,
+        description: form.description || null,
+      };
 
       if (form.useExisting === 'upload' && form.resumeFile) {
-        formData.append('resumeFile', form.resumeFile); // send the actual file
-        formData.append('resumeFileName', form.resumeFile.name);
+        payload.resumeFileName = form.resumeFile.name; // only filename
       } else if (form.useExisting === 'existing' && form.resumeId) {
-        formData.append('resumeId', form.resumeId);
+        payload.resumeId = form.resumeId;
       } else {
         setError('Please select or upload a resume.');
         return;
       }
 
-      await axios.post('https://jat.azurewebsites.net/api/applications', formData, {
+      await axios.post('https://jat.azurewebsites.net/api/applications', payload, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'application/json'
         }
       });
 
@@ -136,6 +103,49 @@ export default function NewApplication() {
       setError(err.response?.data?.message || 'Submission failed');
     }
   };
+
+  // const onSubmit = async e => {
+  //   e.preventDefault();
+  //   setError('');
+
+  //   try {
+  //     const token = localStorage.getItem('token');
+  //     const formData = new FormData();
+
+  //     formData.append('companyName', form.companyName);
+  //     formData.append('jobTitle', form.jobTitle);
+  //     formData.append('dateApplied', form.dateApplied);
+  //     formData.append('postingDate', form.postingDate || '');
+  //     formData.append('closingDate', form.closingDate || '');
+  //     formData.append('jobLocation', form.jobLocation);
+  //     formData.append('employmentType', form.employmentType);
+  //     formData.append('workModel', form.workModel);
+  //     formData.append('salaryRange', form.salaryRange || '');
+  //     formData.append('description', form.description || '');
+
+  //     if (form.useExisting === 'upload' && form.resumeFile) {
+  //       formData.append('resumeFile', form.resumeFile); // send the actual file
+  //       formData.append('resumeFileName', form.resumeFile.name);
+  //     } else if (form.useExisting === 'existing' && form.resumeId) {
+  //       formData.append('resumeId', form.resumeId);
+  //     } else {
+  //       setError('Please select or upload a resume.');
+  //       return;
+  //     }
+
+  //     await axios.post('https://jat.azurewebsites.net/api/applications', formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         'Content-Type': 'multipart/form-data'
+  //       }
+  //     });
+
+  //     navigate('/');
+  //   } catch (err) {
+  //     console.error(err);
+  //     setError(err.response?.data?.message || 'Submission failed');
+  //   }
+  // };
 
   const handleLogout = () => {
     const confirmed = window.confirm("Are you sure you want to logout?");
@@ -251,7 +261,7 @@ export default function NewApplication() {
                 type="file"
                 name="resumeFile"
                 accept=".pdf,.doc,.docx"
-                onChange={onChange}
+                onChange={handleFileChange}
                 className="mt-3 block w-full p-2 border rounded"
               />
             ) : (
