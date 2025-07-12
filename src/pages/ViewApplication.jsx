@@ -364,5 +364,6 @@ function ViewApplication() {
             </div>
         );
     }
+}
 
-    export default ViewApplication;
+export default ViewApplication;

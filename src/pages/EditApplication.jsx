@@ -539,5 +539,6 @@ function EditApplication() {
             </div>
         );
     }
+}
 
-    export default EditApplication;
+export default EditApplication;
