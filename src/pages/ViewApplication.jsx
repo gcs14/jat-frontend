@@ -26,7 +26,6 @@ function ViewApplication() {
     };
 
     useEffect(() => {
-        // First, determine admin status
         const token = localStorage.getItem('token');
         let userRole = false;
 
@@ -86,7 +85,6 @@ function ViewApplication() {
             return;
         }
 
-        // Check if it's a demo resume first
         if (isDemoResume(application.resumeName)) {
             alert("🎭 Demo File Notice\n\nThis resume is part of our demo data and cannot be downloaded. It's included to showcase the application's functionality with sample data.\n\nTo test the download feature, please upload your own resume file.");
             return;
@@ -134,10 +132,12 @@ function ViewApplication() {
 
     const formatDate = (dateString) => {
         if (!dateString) return "Not specified";
-        return new Date(dateString).toLocaleDateString('en-US', {
+        const date = new Date(dateString + (dateString.includes('T') ? '' : 'T00:00:00'));
+        return date.toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
-            day: 'numeric'
+            day: 'numeric',
+            timeZone: 'UTC'
         });
     };
 
