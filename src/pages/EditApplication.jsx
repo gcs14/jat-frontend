@@ -28,6 +28,7 @@ function EditApplication() {
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [resumeId, setResumeId] = useState(null);
 
     useEffect(() => {
         const fetchApplication = async () => {
@@ -59,7 +60,8 @@ function EditApplication() {
                     interviewScheduled: data.interviewScheduled || false,
                     description: data.description || ""
                 });
-                setResumeFileName(data.resume?.fileName || "");
+                setResumeFileName(data.resumeName || "");
+                setResumeId(data.resumeId);
                 setIsLoading(false);
             } catch (err) {
                 console.error("Failed to fetch application:", err);
@@ -84,6 +86,44 @@ function EditApplication() {
             setForm(prev => ({ ...prev, [name]: checked }));
         } else {
             setForm(prev => ({ ...prev, [name]: value }));
+        }
+    };
+
+    const handleResumeDownload = async () => {
+        if (!resumeId) {
+            alert("No resume associated with this application.");
+            return;
+        }
+
+        const token = localStorage.getItem('token');
+        try {
+            const response = await axios.get(`https://jat.azurewebsites.net/api/resumes/${resumeId}/download`, {
+                responseType: 'blob',
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', resumeFileName || 'resume.pdf');
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Download failed:', error);
+
+            let errorMessage = "Failed to download resume. Please try again.";
+
+            if (error.response?.status === 404) {
+                errorMessage = "Resume file not found on server. The file may have been moved or deleted.";
+            } else if (error.response?.status === 403) {
+                errorMessage = "You don't have permission to download this resume.";
+            } else if (error.response?.status === 500) {
+                errorMessage = "Server error occurred while trying to download the resume.";
+            }
+
+            alert(errorMessage);
         }
     };
 
@@ -270,19 +310,23 @@ function EditApplication() {
                             <div className="border-b border-gray-200 pb-6">
                                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Resume</h3>
                                 <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                                    <div className="flex items-center">
-                                        <svg className="w-5 h-5 text-gray-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-                                        </svg>
-                                        <a
-                                            href={`https://jat.azurewebsites.net/api/resumes/${resumeFileName}`}
-                                            className="text-blue-600 hover:underline font-medium"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            download
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center">
+                                            <svg className="w-5 h-5 text-gray-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                                            </svg>
+                                            <span className="font-medium text-gray-900">{resumeFileName}</span>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={handleResumeDownload}
+                                            className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
                                         >
-                                            {resumeFileName}
-                                        </a>
+                                            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                                            </svg>
+                                            Download
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -372,12 +416,10 @@ function EditApplication() {
                             </div>
                         </div>
 
-                        {/* Additional Information */}
                         <div className="border-b border-gray-200 pb-6">
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Information</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                {/* Interview Section */}
                                 <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
                                     <div className="flex items-center mb-3">
                                         <input
@@ -405,7 +447,6 @@ function EditApplication() {
                                     )}
                                 </div>
 
-                                {/* Follow Up */}
                                 <div>
                                     <div className="grid grid-cols-10 gap-2">
                                         <div className="col-span-7">
@@ -440,7 +481,6 @@ function EditApplication() {
                             </div>
                         </div>
 
-                        {/* Description */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Job Description & Notes
@@ -455,7 +495,6 @@ function EditApplication() {
                             />
                         </div>
 
-                        {/* Form Actions */}
                         <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                             <button
                                 type="button"
