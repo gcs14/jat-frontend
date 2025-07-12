@@ -143,7 +143,17 @@ function ViewApplication() {
 
     const formatDateTime = (dateString) => {
         if (!dateString) return "Not specified";
-        return new Date(dateString).toLocaleString('en-US', {
+        const utcDate = new Date(dateString);
+
+        const year = utcDate.getUTCFullYear();
+        const month = utcDate.getUTCMonth();
+        const day = utcDate.getUTCDate();
+        const hours = utcDate.getUTCHours();
+        const minutes = utcDate.getUTCMinutes();
+
+        const displayDate = new Date(year, month, day, hours, minutes);
+
+        return displayDate.toLocaleString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
