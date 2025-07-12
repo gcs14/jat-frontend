@@ -13,6 +13,21 @@ const getDisplayFileType = (mimeType) => {
     return typeMap[mimeType] || mimeType.split('/').pop().toUpperCase();
 };
 
+const isDemoResume = (fileName) => {
+    const demoResumeNames = [
+        'jdoe_resume.pdf',
+        'jdoe_resume1.pdf',
+        'jdoe_resume2.docx',
+        'bob_resume.pdf',
+        'bob_resume2021.pdf'
+    ];
+
+    return demoResumeNames.some(demoName =>
+        fileName?.toLowerCase().includes(demoName.toLowerCase()) ||
+        fileName?.toLowerCase() === demoName.toLowerCase()
+    );
+};
+
 const getFileTypeColor = (fileType) => {
     const colorMap = {
         'PDF': 'bg-red-100 text-red-700 border-red-200',
@@ -101,32 +116,11 @@ export default function ResumesPage() {
         }
     };
 
-    // const handleDownload = async (id, fileName, filePath) => {
-    //     if (!filePath) {
-    //         alert("This resume is part of a demo and cannot be downloaded.");
-    //         return;
-    //     }
-
-    //     const token = localStorage.getItem('token');
-    //     try {
-    //         const response = await axios.get(`https://jat.azurewebsites.net/api/resumes/${id}/download`, {
-    //             responseType: 'blob',
-    //             headers: { Authorization: `Bearer ${token}` }
-    //         });
-    //         const url = window.URL.createObjectURL(new Blob([response.data]));
-    //         const link = document.createElement('a');
-    //         link.href = url;
-    //         link.setAttribute('download', fileName || 'resume.pdf');
-    //         document.body.appendChild(link);
-    //         link.click();
-    //         link.remove();
-    //         window.URL.revokeObjectURL(url);
-    //     } catch {
-    //         alert("Failed to download resume.");
-    //     }
-    // };
-
     const handleDownload = async (id, fileName) => {
+        if (isDemoResume(fileName)) {
+            alert("Demo File Notice\n\nThis resume is part of our demo data and cannot be downloaded. It's included to showcase the application's functionality with sample data.\n\nTo test the download feature, please upload your own resume file.");
+            return;
+        }
         const token = localStorage.getItem('token');
         try {
             const response = await axios.get(`https://jat.azurewebsites.net/api/resumes/${id}/download`, {
@@ -134,7 +128,6 @@ export default function ResumesPage() {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
-            // Create a blob URL and trigger download
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -348,13 +341,6 @@ export default function ResumesPage() {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-center">
                                     <div className="flex justify-center space-x-2">
-                                        {/* <button
-                                            onClick={() => handleDownload(resume.resumeId, resume.fileName, resume.filePath)}
-                                            className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition duration-200 text-xs font-medium shadow-sm"
-                                            title="Download resume"
-                                        >
-                                            Download
-                                        </button> */}
                                         <button
                                             onClick={() => handleDownload(resume.resumeId, resume.fileName)}
                                             className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition duration-200 text-xs font-medium shadow-sm"
