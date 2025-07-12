@@ -298,11 +298,6 @@ export default function ApplicationsPage() {
                                 {isAdmin && (
                                     <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                         <div className="flex items-center">
-                                            {/* <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mr-3 shadow-sm">
-                                                <span className="text-white font-semibold text-xs">
-                                                    {app.userFullName?.charAt(0)?.toUpperCase() || 'U'}
-                                                </span>
-                                            </div> */}
                                             <span className="font-medium">{app.userFullName || 'N/A'}</span>
                                         </div>
                                     </td>

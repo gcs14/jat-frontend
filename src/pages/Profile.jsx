@@ -38,7 +38,6 @@ export default function ProfilePage() {
         setError('');
         setIsSubmittingProfile(true);
 
-        // Validation
         if (!user.name?.trim() || !user.email?.trim()) {
             setError('Name and email are required.');
             setIsSubmittingProfile(false);
@@ -70,7 +69,6 @@ export default function ProfilePage() {
         setError('');
         setIsSubmittingPassword(true);
 
-        // Validation
         if (!passwords.currentPassword || !passwords.newPassword) {
             setError('Current password and new password are required.');
             setIsSubmittingPassword(false);
@@ -216,7 +214,6 @@ export default function ProfilePage() {
                     )}
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        {/* Profile Information Section */}
                         <div className="border-b border-gray-200 pb-6 lg:border-b-0 lg:border-r lg:border-gray-200 lg:pr-8">
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile Information</h3>
                             <form onSubmit={handleSaveProfile} className="space-y-4">
@@ -302,7 +299,6 @@ export default function ProfilePage() {
                             </form>
                         </div>
 
-                        {/* Password Change Section */}
                         <div className="lg:pl-8">
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">Change Password</h3>
                             <form onSubmit={handlePasswordChange} className="space-y-4">

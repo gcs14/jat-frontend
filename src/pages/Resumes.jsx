@@ -235,14 +235,6 @@ export default function ResumesPage() {
             </header>
 
             <div className="relative m-4 flex items-center justify-center">
-                {/* <div className="absolute left-0">
-                    <button
-                        onClick={handleUploadNew}
-                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200 shadow-sm"
-                    >
-                        Upload Resume
-                    </button>
-                </div> */}
                 <h2 className="text-3xl font-bold">My Resumes</h2>
                 <div className="absolute right-0 flex items-center space-x-3">
                     <input

@@ -187,7 +187,7 @@ export default function NewApplication() {
 
       if (message.includes('This resume has already been uploaded') ||
         message.includes('Duplicate resume already exists')) {
-        message = '⚠️ This resume has already been uploaded to your account. Please select a different file or choose an existing resume from the dropdown.';
+        message = 'This resume has already been uploaded to your account. Please select a different file or choose an existing resume from the dropdown.';
       }
 
       setError(message);
