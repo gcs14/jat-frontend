@@ -228,12 +228,13 @@ function LoginPage() {
               <p className="mt-1">
                 This is a demonstration application. Use "Restart Demo Database" to reset all data and start fresh.
               </p>
+              <br/>
               <h4>
                 Demo Users:
               </h4>
               <p>
-                jdoe@example.com --- Password1
-                bobbuckets@example.com --- Password2
+                jdoe@example.com --- Password1<br/>
+                bobbuckets@example.com --- Password2<br/>
                 admin@admin --- admin
               </p>
             </div>
